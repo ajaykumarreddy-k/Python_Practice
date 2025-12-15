@@ -62,3 +62,19 @@ def selection_sort(arr):
         # Swap the found minimum element with the first element
         arr[i], arr[min_idx] = arr[min_idx], arr[i]
     return arr
+
+# insertion sort
+def insertion_sort(arr):
+    n = len(arr)
+    for i in range(1, n):
+        key = arr[i]  # Current element to be inserted
+        j = i - 1  # Index of the previous element
+        # Move elements of arr[0..i-1], that are greater than key,
+        # to one position ahead of their current position
+        while j >= 0 and key < arr[j]:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key  # Place the key at its correct position
+    return arr
+arr = [5,7,90,1,3,6]
+print("insertion sort:", insertion_sort(arr))  # Output: [1, 3, 5, 6, 7, 90]
