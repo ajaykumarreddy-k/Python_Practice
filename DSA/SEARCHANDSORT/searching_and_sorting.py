@@ -199,3 +199,26 @@ arr_for_radix_sort = [170, 45, 75, 90, 802, 24, 2, 66]
 print("Radix Sort:", counting_sort_for_radix(arr_for_radix_sort, 1))  # Output: [2, 24, 45, 66, 75, 90, 170, 802]
 #time complexity: O(d*(n + k)) where d is number of digits, n is number of elements and k is range of input
 #space complexity: O(k) for the count array     
+
+#Counting Sort
+def conting_sort(arr):
+    max_val = max(arr)
+    count = [0] * (max_val + 1)
+    for num in arr:
+        count[num] += 1
+    sorted_index = 0
+    for i in range(len(count)):
+        while count[i] > 0:
+            arr[sorted_index] = i
+            sorted_index += 1
+            count[i] -= 1
+    return arr
+arr_for_counting_sort = [4, 2, 2, 8, 3, 3, 1]
+print("Counting Sort:", conting_sort(arr_for_counting_sort))  # Output: [1, 2, 2, 3, 3, 4, 8]
+#time complexity: O(n + k) where n is number of elements and k is range
+
+#Merge Sort
+def merge_sort(arr):
+    if len(arr) > 1:
+        mid = len(arr) // 2
+        

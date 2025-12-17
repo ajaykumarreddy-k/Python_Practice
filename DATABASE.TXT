@@ -1,0 +1,11 @@
+--- FOR CREATEING THE TABLE------
+
+CREATE TABLE Student(
+student_id INT PRIMARY KEY,
+name VARCHAR(50) NOT NULL,
+age INT CHECK(age>=10),
+gender CHAR(1),
+branch VARCHAR(20),
+Email VARCHAR(40) UNIQUE,
+mobile_number INT UNIQUE,
+join_date DATE DEFAULT CURRENT_DATE);
