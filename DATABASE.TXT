@@ -9,3 +9,37 @@ branch VARCHAR(20),
 Email VARCHAR(40) UNIQUE,
 mobile_number INT UNIQUE,
 join_date DATE DEFAULT CURRENT_DATE);
+
+
+----inserting DATE TO THE TABLR-------
+INSERT INTO Student
+(student_id, name, age, gender, branch, email, mobile_number, join_date)
+VALUES
+(77, 'Ajayasldif', 18, 'MALE', 'CSE', 'ajay122@gmail.com', 123123123, '');
+
+----- filter condition ---
+
+SELECT*FROM Student
+WHERE branch = 'CSE';
+SELECT*FROM Student
+WHERE age>17;
+
+---- update values ---- 
+
+updateing one row 
+UPDATE Student
+SET age = 21
+WHERE student_id = 67;
+
+chaning multiple valves at a time
+
+UPDATE Student
+SET age = 21
+WHERE age = 18;
+
+------ adding new cols ------
+ALTER TABLE Student
+ADD address VARCHAR(20);
+--- modifying the size ---- 
+ALTER TABLE Student
+ADD address VARCHAR(20);
