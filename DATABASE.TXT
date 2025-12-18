@@ -1,45 +1,161 @@
---- FOR CREATEING THE TABLE------
+-- SQL NOTES AND EXAMPLES
 
-CREATE TABLE Student(
-student_id INT PRIMARY KEY,
-name VARCHAR(50) NOT NULL,
-age INT CHECK(age>=10),
-gender CHAR(1),
-branch VARCHAR(20),
-Email VARCHAR(40) UNIQUE,
-mobile_number INT UNIQUE,
-join_date DATE DEFAULT CURRENT_DATE);
+-- =================================================================
+-- DATA DEFINITION LANGUAGE (DDL)
+-- =================================================================
+
+-- CREATE TABLE: Defines a new table.
+-- The following command creates a 'Student' table with various constraints.
+CREATE TABLE Student (
+    student_id INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    age INT CHECK(age >= 10),
+    gender CHAR(1), -- e.g., 'M', 'F', 'O'
+    branch VARCHAR(20),
+    Email VARCHAR(40) UNIQUE,
+    mobile_number BIGINT UNIQUE, -- Changed to BIGINT for standard phone numbers
+    join_date DATE DEFAULT CURRENT_DATE
+);
+
+-- ALTER TABLE: Modifies an existing table structure.
+
+-- Add a new column to the table.
+ALTER TABLE Student
+ADD address VARCHAR(100); -- Increased size for a more realistic address.
+
+-- Modify an existing column's definition (syntax may vary between SQL dialects, e.g., MySQL vs. PostgreSQL).
+-- For example, to change the data type or size.
+-- MySQL:
+-- ALTER TABLE Student
+-- MODIFY COLUMN branch VARCHAR(30);
+
+-- PostgreSQL:
+-- ALTER TABLE Student
+-- ALTER COLUMN branch TYPE VARCHAR(30);
+
+-- DROP TABLE: Deletes a table and all its data permanently.
+-- Be very careful with this command!
+-- DROP TABLE Customers;
 
 
-----inserting DATE TO THE TABLR-------
-INSERT INTO Student
-(student_id, name, age, gender, branch, email, mobile_number, join_date)
-VALUES
-(77, 'Ajayasldif', 18, 'MALE', 'CSE', 'ajay122@gmail.com', 123123123, '');
+-- =================================================================
+-- DATA MANIPULATION LANGUAGE (DML)
+-- =================================================================
 
------ filter condition ---
+-- INSERT INTO: Adds new rows of data into a table.
+INSERT INTO Student (student_id, name, age, gender, branch, email, mobile_number, join_date)
+VALUES (77, 'Ajay', 18, 'M', 'CSE', 'ajay122@gmail.com', 1231231234, '2025-01-15');
+-- Note: It's good practice to provide a valid date or let the default apply.
 
-SELECT*FROM Student
-WHERE branch = 'CSE';
-SELECT*FROM Student
-WHERE age>17;
+-- UPDATE: Modifies existing records in a table.
 
----- update values ---- 
-
-updateing one row 
+-- Update a single row based on a unique identifier.
 UPDATE Student
 SET age = 21
 WHERE student_id = 67;
 
-chaning multiple valves at a time
-
+-- Update multiple rows that match a condition.
 UPDATE Student
 SET age = 21
 WHERE age = 18;
 
------- adding new cols ------
-ALTER TABLE Student
-ADD address VARCHAR(20);
---- modifying the size ---- 
-ALTER TABLE Student
-ADD address VARCHAR(20);
+-- Update multiple columns in a single row.
+UPDATE Customers
+SET country = 'RUSSIA',
+    first_name = 'John'
+WHERE customer_id = 1;
+
+-- DELETE FROM: Removes rows from a table.
+
+-- Delete specific rows based on a condition.
+DELETE FROM Customers
+WHERE country = 'UK'; -- Deletes all customers from the UK.
+
+-- Delete all rows from a table (the table structure remains).
+-- DELETE FROM Customers;
+
+
+-- =================================================================
+-- DATA QUERY LANGUAGE (DQL)
+-- =================================================================
+
+-- SELECT: Retrieves data from one or more tables.
+
+-- Select all columns from a table.
+SELECT * FROM Student;
+
+-- Filtering with WHERE clause.
+SELECT * FROM Student
+WHERE branch = 'CSE';
+
+SELECT * FROM Student
+WHERE age > 17;
+
+-- Using multiple conditions with AND.
+SELECT * FROM Orders
+WHERE amount > 300 AND customer_id = 4;
+
+-- ORDER BY: Sorts the result set in ascending (ASC) or descending (DESC) order.
+-- LIMIT: Restricts the number of rows returned.
+
+-- Get the top 3 highest orders.
+SELECT * FROM Orders
+ORDER BY amount DESC
+LIMIT 3;
+
+-- AGGREGATE FUNCTIONS: Perform a calculation on a set of values and return a single value.
+
+-- MIN(): Returns the minimum value in a set.
+-- Find the minimum age among customers.
+SELECT MIN(age) AS SmallestAge
+FROM Customers;
+
+-- This query might not be standard on all SQL databases as it mixes aggregate and non-aggregate columns without a GROUP BY.
+-- It might only return the first name of one of the customers with the minimum age.
+SELECT MIN(age) AS SmallestAge, first_name
+FROM Customers
+GROUP BY first_name; -- Added GROUP BY for standard SQL, though the original intent might differ.
+
+-- COUNT(): Returns the number of rows.
+
+-- Count all customers.
+SELECT COUNT(*) FROM Customers;
+
+-- Count customers older than 22.
+SELECT COUNT(first_name) FROM Customers
+WHERE age > 22;
+
+-- Count and alias the result column.
+SELECT COUNT(first_name) AS "names" FROM Customers
+WHERE age > 22;
+
+-- ARITHMETIC FUNCTIONS: Perform calculations on numeric data.
+SELECT SUM(amount) FROM Orders; -- Calculates the sum of amounts.
+SELECT AVG(amount) FROM Orders; -- Calculates the average amount.
+SELECT MIN(amount) FROM Orders; -- Finds the minimum amount.
+
+
+-- =================================================================
+-- PATTERN MATCHING & RANGES
+-- =================================================================
+
+-- LIKE OPERATOR: Used in a WHERE clause to search for a specified pattern in a column.
+
+-- Find orders where the item starts with 'M', sorted by item name.
+SELECT * FROM Orders
+WHERE item LIKE 'M%'
+ORDER BY item DESC;
+
+-- Find orders where the item contains the letter 'i' anywhere.
+SELECT * FROM Orders
+WHERE item LIKE '%i%';
+
+-- The '_' wildcard represents a single character.
+-- Find orders where the item is like 'M_us_'. e.g., 'Mouse'
+SELECT * FROM Orders
+WHERE item LIKE 'M_us_';
+
+-- BETWEEN OPERATOR: Selects values within a given range. The values can be numbers, text, or dates.
+-- The range is inclusive.
+SELECT * FROM Orders
+WHERE amount BETWEEN 100 AND 400;
