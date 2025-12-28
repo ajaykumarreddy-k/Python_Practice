@@ -159,3 +159,128 @@ WHERE item LIKE 'M_us_';
 -- The range is inclusive.
 SELECT * FROM Orders
 WHERE amount BETWEEN 100 AND 400;
+
+-- =================================================================
+-- PRACTICE EXAMPLES: College Database
+-- =================================================================
+
+-- Creating the 'Collegedb' and 'DEPARTMENT_TABLE' tables.
+CREATE TABLE Collegedb (
+    student_id INT PRIMARY KEY,
+    student_name VARCHAR(78),
+    age INT,
+    gender CHAR(1),
+    dept_id INT,
+    marks INT
+);
+
+CREATE TABLE DEPARTMENT_TABLE (
+    dept_id INT PRIMARY KEY,
+    DEPT_NAME VARCHAR(30)
+);
+
+-- Inserting data into the tables.
+-- Note: 'gender' is corrected to 'M' from 'MALE' to fit CHAR(1).
+INSERT INTO Collegedb (student_id, student_name, age, gender, dept_id, marks)
+VALUES
+    (1, 'AJAY', 19, 'M', 9090, 100),
+    (2, 'AJAY', 19, 'M', 9091, 96),
+    (3, 'AJAY1', 19, 'M', 9092, 97),
+    (4, 'AJAY2', 19, 'M', 9093, 98),
+    (5, 'AJAY3', 19, 'M', 9094, 99);
+
+INSERT INTO DEPARTMENT_TABLE (dept_id, DEPT_NAME)
+VALUES
+    (9090, 'CSE-CORE'),
+    (9091, 'CSE-INTEGRATED'),
+    (9092, 'CSE-IOT'),
+    (9093, 'CSE-ML'),
+    (9094, 'CSE-AI');
+
+-- =================================================================
+-- PRACTICE QUERIES
+-- =================================================================
+
+-- Select all students from the college database.
+SELECT * FROM Collegedb;
+
+-- JOIN: Select students and their department names, for those with marks less than 70.
+-- (This will return no results with the current data).
+SELECT
+    c.student_id,
+    c.student_name,
+    c.marks,
+    d.DEPT_NAME
+FROM
+    Collegedb c
+JOIN
+    DEPARTMENT_TABLE d ON c.dept_id = d.dept_id
+WHERE
+    c.marks < 70;
+
+-- ORDER BY: Select all students, ordered by age in descending order.
+SELECT * FROM Collegedb
+ORDER BY age DESC;
+
+-- Subquery: Count the number of students in each department.
+SELECT
+    d.DEPT_NAME,
+    (SELECT COUNT(*) FROM Collegedb c WHERE c.dept_id = d.dept_id) AS student_count
+FROM
+    DEPARTMENT_TABLE d
+ORDER BY
+    student_count DESC, d.DEPT_NAME ASC;
+
+-- Alternative using GROUP BY (more common):
+/*
+SELECT
+    d.DEPT_NAME,
+    COUNT(c.student_id) AS student_count
+FROM
+    DEPARTMENT_TABLE d
+LEFT JOIN
+    Collegedb c ON d.dept_id = c.dept_id
+GROUP BY
+    d.DEPT_NAME
+ORDER BY
+    student_count DESC, d.DEPT_NAME ASC;
+*/
+
+-- AVG(): Calculate the average marks of all students.
+SELECT AVG(marks) AS "Average Marks" FROM Collegedb;
+
+-- UPDATE: Change the marks for a specific student.
+UPDATE Collegedb
+SET marks = 100
+WHERE student_id = 5;
+
+-- DELETE: Remove a student from the database.
+DELETE FROM Collegedb
+WHERE student_id = 5;
+
+
+----------------------------------------------
+INNOR JOINT 
+
+SELECT c.student_id, c.student_name, c.age, c.gender, c.dept_id, c.marks, d.DEPT_NAME
+FROM Collegedb c
+INNER JOIN DEPARTMENT_TABLE d ON c.dept_id = d.dept_id;
+
+reverse 
+
+SELECT c.student_id, c.student_name, c.age, c.gender, c.dept_id, c.marks, d.DEPT_NAME
+FROM Collegedb c
+INNER JOIN DEPARTMENT_TABLE d ON d.dept_id = c.dept_id;
+
+left JOINT
+
+SELECT c.student_id, c.student_name, c.age, c.gender, c.dept_id, c.marks, d.DEPT_NAME
+FROM Collegedb c
+LEFT JOIN DEPARTMENT_TABLE d ON d.dept_id = c.dept_id;
+
+RIGHT JOINT 
+
+SELECT s.student_name,d.dept_name
+FROM Collegedb
+RIGHT JOINT Departments d,
+ON s.dept_id=d.dept_id;
